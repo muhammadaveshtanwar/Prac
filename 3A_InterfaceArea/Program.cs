@@ -7,32 +7,33 @@ interface IArea
 
 class Circle : IArea
 {
-    public double Radius;
+    private double radius;
 
     public Circle(double radius)
     {
-        Radius = radius;
+        this.radius = radius;
     }
 
     public double CalculateArea()
     {
-        return Math.PI * Radius * Radius;
+        return Math.PI * radius * radius;
     }
 }
 
 class Rectangle : IArea
 {
-    public double Length, Width;
+    private double length;
+    private double width;
 
     public Rectangle(double length, double width)
     {
-        Length = length;
-        Width = width;
+        this.length = length;
+        this.width = width;
     }
 
     public double CalculateArea()
     {
-        return Length * Width;
+        return length * width;
     }
 }
 
@@ -40,11 +41,13 @@ class Program
 {
     static void Main()
     {
-        Circle c = new Circle(5);
-        Rectangle r = new Rectangle(10, 4);
+        IArea circle = new Circle(7);
+        Console.WriteLine("Radius = 7");
+        Console.WriteLine("Area of Circle = " + circle.CalculateArea().ToString("0.00"));
+        Console.WriteLine();
 
-        Console.WriteLine($"Circle Area: {c.CalculateArea()}");
-
-        Console.WriteLine($"Rectangle Area: {r.CalculateArea()}");
+        IArea rectangle = new Rectangle(10, 5);
+        Console.WriteLine("Length = 10, Width = 5");
+        Console.WriteLine("Area of Rectangle = " + rectangle.CalculateArea().ToString("0.00"));
     }
 }

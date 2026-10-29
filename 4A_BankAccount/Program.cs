@@ -4,19 +4,39 @@ class BankAccount
 {
     public string AccountNumber { get; set; }
 
-    private decimal balance;
+    private double balance;
 
-    public decimal Balance
+    public double Balance
     {
         get { return balance; }
         set
         {
             if (value < 0)
-                throw new ArgumentException(
-                    "Balance cannot be negative.");
-
+            {
+                throw new ArgumentException("Balance cannot be negative");
+            }
             balance = value;
         }
+    }
+
+    public BankAccount(string accountNumber, double balance)
+    {
+        AccountNumber = accountNumber;
+        Balance = balance;
+    }
+
+    public void Deposit(double amount)
+    {
+        Balance = Balance + amount;
+    }
+
+    public void Withdraw(double amount)
+    {
+        if (amount > balance)
+        {
+            throw new ArgumentException("Insufficient balance");
+        }
+        Balance = Balance - amount;
     }
 }
 
@@ -24,22 +44,51 @@ class Program
 {
     static void Main()
     {
-        BankAccount account = new BankAccount();
+        BankAccount acc = new BankAccount("ACC1001", 5000);
 
-        account.AccountNumber = "123456";
-        account.Balance = 5000;
+        Console.WriteLine("Account Number : " + acc.AccountNumber);
+        Console.WriteLine("Balance        : " + acc.Balance);
+        Console.WriteLine();
 
-        Console.WriteLine("Account Number: " +
-            account.AccountNumber);
-        Console.WriteLine("Balance: " + account.Balance);
+        acc.Deposit(2000);
+        Console.WriteLine("After Deposit 2000  : " + acc.Balance);
 
+        acc.Withdraw(1500);
+        Console.WriteLine("After Withdraw 1500 : " + acc.Balance);
+        Console.WriteLine();
+
+        Console.WriteLine("Setting balance = -500");
         try
         {
-            account.Balance = -100;
+            acc.Balance = -500;
         }
-        catch (ArgumentException ex)
+        catch (ArgumentException e)
         {
-            Console.WriteLine(ex.Message);
+            Console.WriteLine("Exception : " + e.Message);
+        }
+        Console.WriteLine("Balance is still : " + acc.Balance);
+        Console.WriteLine();
+
+        Console.WriteLine("Withdrawing 99999");
+        try
+        {
+            acc.Withdraw(99999);
+        }
+        catch (ArgumentException e)
+        {
+            Console.WriteLine("Exception : " + e.Message);
+        }
+        Console.WriteLine("Balance is still : " + acc.Balance);
+        Console.WriteLine();
+
+        Console.WriteLine("Creating account with negative balance");
+        try
+        {
+            BankAccount acc2 = new BankAccount("ACC1002", -100);
+        }
+        catch (ArgumentException e)
+        {
+            Console.WriteLine("Exception : " + e.Message);
         }
     }
 }
